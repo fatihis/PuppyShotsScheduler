@@ -5,7 +5,7 @@
 How to build
 Assuming you have .Net Core SDK, React.js, MySql Server and Node.js on your system; first you need to build a .Net Core Web API project. You can use either Visual Studio or Command Prompt (Powershell for Windows 10). If you are going to build it with Visual Studio you can just jump steps below. Then you have to create react app with node.js npm.
 
-1. Determine path of your project then use cd to take you there
+1) Determine path of your project then use cd to take you there
 
 2)Build .Net Core solution with “dotnet new webapi -o ProjectName –no—https”
 3)Build react app with node.js npx with following line “npx create-react-native-app ClientApp”
