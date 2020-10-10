@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export class FetchData extends Component {
   static displayName = FetchData.name;
-  
+  static counter = 0;
 
   constructor(props) {
     super(props);
@@ -17,22 +17,23 @@ export class FetchData extends Component {
     return (
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
-                <tr>
-
+          <tr>
+            
                     <th>ID</th>
                     <th>Last Vaccine Date</th>
                     <th>Age</th>
                     <th>Next Appointment</th>
-          </tr>
+                              </tr>
         </thead>
         <tbody>
-          {animals.map(animal =>
-              <tr key={animal.ID}>
-              <td>{animal.ID}</td>
-              <td>{animal.Age}</td>
-              <td>{animal.LastVaccineDate}</td>
-              <td>{animal.NextVaccineDate}</td>
-            </tr>
+          
+        {animals.map(animal =>
+              <tr key={animal.id}>
+              <td>{animal.id}</td>
+              <td>{animal.lastVaccineDate}</td>
+              <td>{animal.age}</td>
+              <td>{animal.nextVaccineDate}</td>
+          </tr>
           )}
         </tbody>
       </table>

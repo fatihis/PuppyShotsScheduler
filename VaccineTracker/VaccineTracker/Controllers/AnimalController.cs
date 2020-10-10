@@ -23,15 +23,24 @@ namespace VaccineTracker.Controllers
         [HttpGet]
         public IEnumerable<Animal> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Animal
-            {
-                NextVaccineDate = DateTime.Now.AddDays(index),
-                LastVaccineDate = DateTime.Now.AddDays(index),
-                Age = rng.Next(-20, 55),
-                ID = rng.Next(-20, 55)
-            })
-            .ToArray();
+            return new List<Animal>{new Animal {
+                NextVaccineDate = DateTime.Now.AddDays(2),
+                LastVaccineDate = DateTime.Now.AddDays(3),
+                Age = 4,
+                ID = 5
+
+            }};
+
+            /* var rng = new Random();
+             return Enumerable.Range(1, 5).Select(index => new Animal
+             {
+                 NextVaccineDate = DateTime.Now.AddDays(index),
+                 LastVaccineDate = DateTime.Now.AddDays(index),
+                 Age = rng.Next(-20, 55),
+                 ID = rng.Next(60, 12313)
+
+             })
+             .ToArray();*/
         }
     }
 }
