@@ -49,6 +49,45 @@ export class FetchData extends Component {
       <div>
         <h1 id="tabelLabel" >Pet List</h1>
         <p>In progress</p>
+        ID:   
+        <input type="text" className="idSearch"/>
+        <button >Search</button>
+       
+        
+      
+
+    <div className="data">
+
+    <ReactBootStrap.Table striped bordered hover>
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Age</th>
+    <th>Latest Vaccine Date</th>
+    <th>Next Vaccine Date</th>
+  </tr>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+</thead>
+
+</ReactBootStrap.Table>
+    
+    
+    </div>
+  
+
+        <div className="updateInputsDiv">
+        Age : <input type="text" className="updateInputs"/>
+        Last Vaccine Date : <input type="text" className="updateInputs"/>
+        Next Vaccine Date : <input type="text" className="updateInputs"/>
+        <button className="updateButton">Update</button>
+        </div>
+    
+       
         {contents}
       </div>
     );

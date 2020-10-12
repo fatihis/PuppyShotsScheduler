@@ -3,8 +3,8 @@
   text-align: center;
   word-break: break-all;
 }
-img{
-    height: 50px;
+img {
+  height: 50px;
 }
 
 html {
@@ -17,5 +17,27 @@ html {
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+}
+
+.idSearch {
+  margin-left: 20px;
+  margin-right: 2px;
+}
+.data {
+  background-color: rgb(224, 191, 147);
+  margin-top: 10px;
+}
+.updateInputs {
+  margin-right: 50px;
+  margin-bottom: 15px;
+}
+.updateButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.updateInputsDiv {
+  margin-top: 10px;
+  text-align: center;
 }
