@@ -42,7 +42,7 @@ namespace VaccineTracker
                             ID = Convert.ToInt32(reader["idpuppytable"]),
                             Age = Convert.ToInt32(reader["agepuppytable"]),
                             LastVaccineDate = DateTime.Parse(reader["latestvaccinetable"].ToString()),
-                            NextVaccineDate = Convert.ToDateTime(reader["latestvaccinetable"].ToString())
+                            NextVaccineDate = Convert.ToDateTime(reader["nextvaccinetable"].ToString())
 
 
                         });
@@ -50,6 +50,35 @@ namespace VaccineTracker
                 }
             }
             return list;
+        }
+        public Animal GetPuppy(int id)
+        {
+            Animal getAnimalItem = new Animal();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+
+
+                MySqlCommand cmd = new MySqlCommand("select * from puppytable where idpuppytable'" + id + "", conn);
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        getAnimalItem = new Animal()
+                        {
+
+                            ID = Convert.ToInt32(reader["idpuppytable"]),
+                            Age = Convert.ToInt32(reader["agepuppytable"]),
+                            LastVaccineDate = DateTime.Parse(reader["latestvaccinetable"].ToString()),
+                            NextVaccineDate = Convert.ToDateTime(reader["nextvaccinetable"].ToString())
+
+
+                        };
+                    }
+                }
+            }
+            return getAnimalItem;
         }
 
 

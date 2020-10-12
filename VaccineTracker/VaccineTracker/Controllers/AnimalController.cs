@@ -33,5 +33,11 @@ namespace VaccineTracker.Controllers
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
             return context.GetAllPuppys();
         }
+        public Animal Get(int id)
+        {
+            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
+            return context.GetPuppy(id);
+        }
+
     }
 }
