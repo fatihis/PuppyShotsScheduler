@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-
+import * as ReactBootStrap from "react-bootstrap";
 export class FetchData extends Component {
   static displayName = FetchData.name;
   static counter = 0;
 
   constructor(props) {
     super(props);
-    this.state = { animals: [], loading: true };
+    this.state = { animals: [], animal: Object, loading: true };
   }
 
   componentDidMount() {
     this.populateAnimalData();
+   
   }
 
   static renderAnimalsTable(animals) {
@@ -98,4 +99,5 @@ export class FetchData extends Component {
     const data = await response.json();
     this.setState({ animals: data, loading: false });
   }
+  
 }

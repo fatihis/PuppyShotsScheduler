@@ -7,7 +7,7 @@ export class Home extends Component {
   render () {
     return (
         <div>
-            <p>//Search module should be hear within 12 hours</p>
+           
             <MenuComp />
 
       </div>
