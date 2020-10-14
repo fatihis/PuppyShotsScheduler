@@ -29,7 +29,7 @@ namespace VaccineTracker
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "C:/Users/fatih/Desktop/vaccine-puppy-react/VaccineTrackerClient/App/build";
             });
         }
 
@@ -57,7 +57,7 @@ namespace VaccineTracker
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/animal/{id?}");
             });
 
             app.UseSpa(spa =>
