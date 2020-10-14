@@ -36,6 +36,7 @@ namespace VaccineTracker
                 {
                     while (reader.Read())
                     {
+
                         list.Add(new Animal()
                         {
 
@@ -48,7 +49,9 @@ namespace VaccineTracker
                         });
                     }
                 }
+
             }
+
             return list;
         }
         public Animal GetPuppy(int id)
@@ -59,29 +62,61 @@ namespace VaccineTracker
             {
 
 
-                MySqlCommand cmd = new MySqlCommand("select * from puppytable where idpuppytable'" + id + "", conn);
+                MySqlCommand cmd = new MySqlCommand("select * from puppytable where idpuppytable = '" + id + "'", conn);
                 conn.Open();
-                using (var reader = cmd.ExecuteReader())
+                try
                 {
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        getAnimalItem = new Animal()
+                        while (reader.Read())
                         {
+                            getAnimalItem = new Animal()
+                            {
 
-                            ID = Convert.ToInt32(reader["idpuppytable"]),
-                            Age = Convert.ToInt32(reader["agepuppytable"]),
-                            LastVaccineDate = DateTime.Parse(reader["latestvaccinetable"].ToString()),
-                            NextVaccineDate = Convert.ToDateTime(reader["nextvaccinetable"].ToString())
+                                ID = Convert.ToInt32(reader["idpuppytable"]),
+                                Age = Convert.ToInt32(reader["agepuppytable"]),
+                                LastVaccineDate = DateTime.Parse(reader["latestvaccinetable"].ToString()),
+                                NextVaccineDate = Convert.ToDateTime(reader["nextvaccinetable"].ToString())
 
 
-                        };
+                            };
+                        }
                     }
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine("hata: " + e);
                 }
             }
             return getAnimalItem;
         }
 
+        public void updateAnimal(int id, Animal updatedAnimalData)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                string updateAnimalCmdString = "update puppytable set iduppytable=@animalid, agepuppytable=@agepuppy, lastvaccinetable=@lastvaccine, nextvaccinetable=@nextvaccine where OgrenciId='" + id + "'";
+                MySqlCommand cmd = new MySqlCommand(updateAnimalCmdString, conn);
+                try
+                {
+                    cmd.Parameters.AddWithValue("@animalid", updatedAnimalData.ID);
+                    cmd.Parameters.AddWithValue("@agepuppy", updatedAnimalData.Age);
+                    cmd.Parameters.AddWithValue("@lastvaccine", updatedAnimalData.LastVaccineDate);
+                    cmd.Parameters.AddWithValue("@nextvaccine", updatedAnimalData.NextVaccineDate);
 
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+        }
 
 
 
