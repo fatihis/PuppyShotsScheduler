@@ -41,10 +41,10 @@ namespace VaccineTracker.Controllers
             return context.GetPuppy(id);
         }
         [HttpPost]
-        public IActionResult Set(int id, Animal data)
+        public Animal Set(int id, Animal data)
         {
-            DataTools context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
-            context.UpdateAnimal(id, data);
+            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
+            context.updateAnimal(id, data);
             return context.GetPuppy(id);
         }
 

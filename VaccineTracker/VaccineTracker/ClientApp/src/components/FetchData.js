@@ -6,13 +6,51 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { animals: [], animal: Object, loading: true };
+    this.state = { animals: [], animal: Object, id: 0, loading: true, loadingAn: true };
   }
 
   componentDidMount() {
     this.populateAnimalData();
    
   }
+  async searchOnclick(){
+  //aşağıdaki populate animals gibi method yazılmalısın ismi getAnimal(int id) olabilir fetch('animal') yerine fetch('animal/id'); yazmalısın getAnimala yollayacağın id searchün üstündeki textboxt ın verisi olmalı
+  //getAnimal(idSearch.text)
+  const inputVal = document.getElementById("getData").value;
+  alert(inputVal);
+  this.setState({ id: inputVal });
+
+  this.GetAnimalData();
+ 
+
+}
+static renderAnimal(animal) {
+  return (
+    <table className='table table-striped' aria-labelledby="tabelLabel">
+      <thead>
+        <tr>
+          
+                  <th>ID</th>
+                  <th>Last Vaccine Date</th>
+                  <th>Age</th>
+                  <th>Next Appointment</th>
+                            </tr>
+      </thead>
+      <tbody>
+        
+     
+            <tr key={animal.id}>
+            <td>{animal.id}</td>
+            <td>{animal.lastVaccineDate}</td>
+            <td>{animal.age}</td>
+            <td>{animal.nextVaccineDate}</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  );
+}
+  
 
   static renderAnimalsTable(animals) {
     return (
@@ -45,37 +83,24 @@ export class FetchData extends Component {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
       : FetchData.renderAnimalsTable(this.state.animals);
+     let contentsx = this.state.loadingAn
+      ? <p><em>Loading...</em></p>
+      :  FetchData.renderAnimal(this.state.animal);
 
     return (
       <div>
         <h1 id="tabelLabel" >Pet List</h1>
         <p>In progress</p>
         ID:   
-        <input type="text" className="idSearch"/>
-        <button >Search</button>
-       
+        <input type="text" id="getData" className="idSearch"/>
+        <button onClick={this.searchOnclick.bind(this)}>Search</button>
+        {contentsx}
         
       
 
     <div className="data">
 
-    <ReactBootStrap.Table striped bordered hover>
-<thead>
-  <tr>
-    <th>ID</th>
-    <th>Age</th>
-    <th>Latest Vaccine Date</th>
-    <th>Next Vaccine Date</th>
-  </tr>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-</thead>
-
-</ReactBootStrap.Table>
+   
     
     
     </div>
@@ -90,6 +115,7 @@ export class FetchData extends Component {
     
        
         {contents}
+        
       </div>
     );
   }
@@ -99,5 +125,16 @@ export class FetchData extends Component {
     const data = await response.json();
     this.setState({ animals: data, loading: false });
   }
+
+  
+  async GetAnimalData() {
+    const response = await fetch('animal/'+this.state.id);
+    alert('animal/'+this.state.id);
+    const data = await response.json();
+    this.setState({ animal: data, loadingAn : false });
+  }
+
+
+  
   
 }
