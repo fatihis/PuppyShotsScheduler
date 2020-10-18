@@ -118,6 +118,33 @@ namespace VaccineTracker
 
         }
 
+        public void AddPuppy(Animal animalToAdd)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                string insertAnimalCmdString = "insert into puppytable (idpuppytable,agepuppytable,lastvaccinetable,nextvaccinetable) values (@id,@age,@lastvaccinedate,@nextvaccinedate)";
+                MySqlCommand cmd = new MySqlCommand(insertAnimalCmdString, conn);
+                try
+                {
+                    cmd.Parameters.AddWithValue("@animalid", animalToAdd.ID);
+                    cmd.Parameters.AddWithValue("@agepuppy", animalToAdd.Age);
+                    cmd.Parameters.AddWithValue("@lastvaccine", animalToAdd.LastVaccineDate);
+                    cmd.Parameters.AddWithValue("@nextvaccine", animalToAdd.NextVaccineDate);
+
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+        }
+
 
 
 

@@ -41,6 +41,29 @@ namespace VaccineTracker.Controllers
             return context.GetPuppy(id);
         }
         [HttpPost]
+        public Animal add(Animal animalToAdd)
+        {
+
+            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
+            context.AddPuppy(animalToAdd);
+            return context.GetPuppy(animalToAdd.ID);
+
+        }
+
+        public Animal Set(int id, int age, DateTime last, DateTime next)
+        {
+            Animal animalToAdd = new Animal
+            {
+                Age = age,
+                ID = id,
+                LastVaccineDate = last,
+                NextVaccineDate = next
+            };
+            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
+            context.AddPuppy(animalToAdd);
+            return context.GetPuppy(id);
+
+        }
         public Animal Set(int id, Animal data)
         {
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;

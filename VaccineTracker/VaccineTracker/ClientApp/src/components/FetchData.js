@@ -6,7 +6,7 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { animals: [], animal: Object, id: 0, loading: true, loadingAn: true };
+    this.state = { animals: [], animal: Object, addObject : Object, id: 0, loading: true, loadingAn: true, urlAdd : 'https://localhost:5001/add'};
   }
 
   componentDidMount() {
@@ -24,6 +24,46 @@ export class FetchData extends Component {
  
 
 }
+  async addOnclick(){
+    alert(document.getElementById("idToAddInput").value+" eklendi");
+    const idToAdd = document.getElementById("idToAddInput").value;
+    const ageToAdd = document.getElementById("ageToAddInput").value;
+    const nextDateToAdd = document.getElementById("nextVacToAddInput").value;
+    const lastDateToAdd = document.getElementById("lastVacToAddInput").value;
+
+    
+    let data = {
+      id : idToAdd,
+      lastVaccineDate: lastDateToAdd,
+      nextVaccineDate: nextDateToAdd,
+      age: ageToAdd
+  };
+  this.setState({addObject : data});
+  alert(data.id);
+
+  this.postData();
+  /*
+  const url = 'https://localhost:5001/add';
+
+    var request = new Request(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      mode: 'cors',
+      credentials: 'same-origin',
+      headers: {'Content-Type': 'application/json'}
+    });
+    fetch(request)
+    .then(function(response) {
+      if (!response.ok) {
+        alert(response.status);
+        
+        
+      }
+      return response.blob();
+    });*/
+    
+
+  } 
 static renderAnimal(animal) {
   return (
     <table className='table table-striped' aria-labelledby="tabelLabel">
@@ -112,7 +152,14 @@ static renderAnimal(animal) {
         Next Vaccine Date : <input type="text" className="updateInputs"/>
         <button className="updateButton">Update</button>
         </div>
-    
+        <div className="addInputsDiv">
+        ID : <input type="text" id="idToAddInput" className="addInputs"/>
+        Age : <input type="text" id="ageToAddInput" className="addInputs"/>
+        Last Vaccine Date : <input type="date" id="nextVacToAddInput" className="addInputs"/>
+        Next Vaccine Date : <input type="date" id="lastVacToAddInput" className="addInputs"/>
+        <button className="addButton" onClick={this.addOnclick.bind(this)}>Add</button>
+
+        </div>
        
         {contents}
         
@@ -133,6 +180,22 @@ static renderAnimal(animal) {
     const data = await response.json();
     this.setState({ animal: data, loadingAn : false });
   }
+   async postData() {
+    const response = await fetch(this.urlAdd, {
+      method: 'POST', 
+      mode: 'cors', 
+      cache: 'no-cache', 
+      credentials: 'same-origin', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer', 
+      body: JSON.stringify(this.addObject) 
+    });
+    return response.json(); 
+  }
+  
 
 
   
