@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/VaccineTracker/bin/Debug/netcoreapp3.1/VaccineTracker.dll",
-            "args": [],
+            "args": ["debug","run"],
             "cwd": "${workspaceFolder}/VaccineTracker",
             "stopAtEntry": false,
             "enableStepFiltering": false,

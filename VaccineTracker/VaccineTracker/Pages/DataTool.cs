@@ -91,56 +91,109 @@ namespace VaccineTracker
             return getAnimalItem;
         }
 
-        public void updateAnimal(int id, Animal updatedAnimalData)
+        public Animal updateAnimal(Animal updatedAnimalData)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                string updateAnimalCmdString = "update puppytable set iduppytable=@animalid, agepuppytable=@agepuppy, lastvaccinetable=@lastvaccine, nextvaccinetable=@nextvaccine where OgrenciId='" + id + "'";
+                string updateAnimalCmdString = "update puppytable set agepuppytable=@agepuppy, latestvaccinetable=@lastvaccine, nextvaccinetable=@nextvaccine where idpuppytable='iduppytable=@animalid'";
+
+
                 MySqlCommand cmd = new MySqlCommand(updateAnimalCmdString, conn);
                 try
                 {
+
                     cmd.Parameters.AddWithValue("@animalid", updatedAnimalData.ID);
                     cmd.Parameters.AddWithValue("@agepuppy", updatedAnimalData.Age);
                     cmd.Parameters.AddWithValue("@lastvaccine", updatedAnimalData.LastVaccineDate);
                     cmd.Parameters.AddWithValue("@nextvaccine", updatedAnimalData.NextVaccineDate);
 
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                        }
+                    }
+
                 }
-                catch (Exception exc)
+                catch (ArgumentException e)
                 {
-                    Console.WriteLine(exc.Message);
+                    Console.WriteLine("hata: " + e);
                 }
-                finally
-                {
-                    conn.Close();
-                }
+
+                /* try
+                 {
+                     cmd.Parameters.AddWithValue("@animalid", updatedAnimalData.ID);
+                     cmd.Parameters.AddWithValue("@agepuppy", updatedAnimalData.Age);
+                     cmd.Parameters.AddWithValue("@lastvaccine", updatedAnimalData.LastVaccineDate);
+                     cmd.Parameters.AddWithValue("@nextvaccine", updatedAnimalData.NextVaccineDate);
+
+                 }
+                 catch (Exception exc)
+                 {
+                     Console.WriteLine(exc.Message);
+                 }
+                 finally
+                 {
+                     conn.Close();
+                 }*/
             }
+            return updatedAnimalData;
 
         }
 
-        public void AddPuppy(Animal animalToAdd)
+        public Animal AddPuppy(Animal animalToAdd)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                string insertAnimalCmdString = "insert into puppytable (idpuppytable,agepuppytable,lastvaccinetable,nextvaccinetable) values (@id,@age,@lastvaccinedate,@nextvaccinedate)";
+                DateTime nextTemp = DateTime.Now;
+                DateTime lastTemp = DateTime.Now.AddDays(90);
+
+                /*string sqlFormattedDateLast = animalToAdd.LastVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string sqlFormattedDateNext = animalToAdd.NextVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");*/
+                string sqlFormattedDateNext = nextTemp.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string sqlFormattedDateLast = lastTemp.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                Console.WriteLine("animalobject:" + animalToAdd.ToString());
+
+                string insertAnimalCmdString = "insert into puppytable (idpuppytable,agepuppytable,latestvaccinetable,nextvaccinetable) values ('" + animalToAdd.ID + "','" + animalToAdd.Age + "','" + sqlFormattedDateLast + "','" + sqlFormattedDateNext + "')";
                 MySqlCommand cmd = new MySqlCommand(insertAnimalCmdString, conn);
                 try
                 {
-                    cmd.Parameters.AddWithValue("@animalid", animalToAdd.ID);
-                    cmd.Parameters.AddWithValue("@agepuppy", animalToAdd.Age);
-                    cmd.Parameters.AddWithValue("@lastvaccine", animalToAdd.LastVaccineDate);
-                    cmd.Parameters.AddWithValue("@nextvaccine", animalToAdd.NextVaccineDate);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
 
+                        }
+                    }
+                    return animalToAdd;
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine("hata: " + e);
+                    return animalToAdd;
+                }
+                /*string insertAnimalCmdString = "insert into puppytable (idpuppytable,agepuppytable,latestvaccinetable,nextvaccinetable) values (@idpuppytable,@agepuppytable,@lastvaccinetable,@nextvaccinetable)";
+                MySqlCommand cmd = new MySqlCommand(insertAnimalCmdString, conn);
+                try
+                {
+                    cmd.Parameters.AddWithValue("@idpuppytable", animalToAdd.ID);
+                    cmd.Parameters.AddWithValue("@agepuppytable", animalToAdd.Age);
+                    cmd.Parameters.AddWithValue("@latestvaccinetable", animalToAdd.LastVaccineDate);
+                    cmd.Parameters.AddWithValue("@nextvaccinetable", animalToAdd.NextVaccineDate);
+
+                    return animalToAdd;
                 }
                 catch (Exception exc)
                 {
                     Console.WriteLine(exc.Message);
+                    return animalToAdd;
                 }
                 finally
                 {
                     conn.Close();
-                }
+                }*/
             }
 
         }

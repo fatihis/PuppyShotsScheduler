@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MySqlConnector;
+
 using MySql.Data.MySqlClient;
 
 
@@ -40,18 +40,27 @@ namespace VaccineTracker.Controllers
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
             return context.GetPuppy(id);
         }
-        [HttpPost]
-        public Animal add(Animal animalToAdd)
+        [HttpPost("add")]
+        public Animal add([FromBody] Animal animalToAdd)
         {
+
 
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
             context.AddPuppy(animalToAdd);
-            return context.GetPuppy(animalToAdd.ID);
+            return animalToAdd;
 
         }
-
-        public Animal Set(int id, int age, DateTime last, DateTime next)
+        [HttpPut]
+        public Animal Put(Animal animalToUpdate)
         {
+            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
+            context.updateAnimal(animalToUpdate);
+            return animalToUpdate;
+        }
+        /*[HttpPost()]
+        public Animal Set(int id,  DateTime last, DateTime next,int age)
+        {
+            Console.WriteLine("set1");
             Animal animalToAdd = new Animal
             {
                 Age = age,
@@ -64,12 +73,14 @@ namespace VaccineTracker.Controllers
             return context.GetPuppy(id);
 
         }
+        [HttpPost()]
         public Animal Set(int id, Animal data)
         {
+            Console.WriteLine("set2");
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
             context.updateAnimal(id, data);
             return context.GetPuppy(id);
-        }
+        }*/
 
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MySqlConnector;
+
 
 namespace VaccineTracker
 {
@@ -57,7 +57,7 @@ namespace VaccineTracker
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/animal/{id?}");
+                    pattern: "{controller}/{id?}");
             });
 
             app.UseSpa(spa =>
