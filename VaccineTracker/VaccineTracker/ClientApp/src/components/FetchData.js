@@ -9,7 +9,6 @@ export class FetchData extends Component {
     this.state = {
       animals: [],
       error: "",
-      counter: 0,
       animal: Object,
       addObject: Object,
       id: 0,
@@ -22,40 +21,36 @@ export class FetchData extends Component {
   componentDidMount() {
     this.populateAnimalData();
   }
-  async searchOnclick() {
+  componentDidUpdate() {
+    this.populateAnimalData();
+  }
+  searchOnclick() {
     //aşağıdaki populate animals gibi method yazılmalısın ismi getAnimal(int id) olabilir fetch('animal') yerine fetch('animal/id'); yazmalısın getAnimala yollayacağın id searchün üstündeki textboxt ın verisi olmalı
     //getAnimal(idSearch.text)
     const inputVal = document.getElementById("getData").value;
 
     this.setState({ id: inputVal });
-    this.setState({ counter: this.counter + 1 });
 
     this.GetAnimalData();
-    if (this.counter > 1) {
-      document.getElementById(
-        "ageUpdateText"
-      ).setAttribute = this.animal.age.toString();
-      document.getElementById(
-        "lastUpdateText"
-      ).setAttribute = this.animal.lastVaccineDate;
-      document.getElementById(
-        "nextUpdateText"
-      ).setAttribute = this.animal.nextVaccineDate;
-    }
-    alert(this.counter);
+    this.setState({ loadingAn: false });
+
+    this.setState({ counter: true });
   }
   addOnclick() {
     const idToAdd = document.getElementById("idToAddInput").value;
     const ageToAdd = document.getElementById("ageToAddInput").value;
+
     var nextDateToAdd = document.getElementById("nextVacToAddInput").value;
     var lastDateToAdd = document.getElementById("lastVacToAddInput").value;
-    var date = new Date("1995-12-17T03:24:00");
-    date.toJSON(); // this is the JavaScript date as a c# DateTime
+    var nextDateObj = new Date(nextDateToAdd);
+    nextDateObj.toJSON();
+    var lastDateObj = new Date(lastDateToAdd);
+    lastDateObj.toJSON();
 
     var data = {
       id: parseInt(idToAdd),
-      lastVaccineDate: date,
-      nextVaccineDate: date,
+      lastVaccineDate: nextDateObj,
+      nextVaccineDate: lastDateObj,
       age: parseInt(ageToAdd),
     };
     this.setState({ addObject: data });
@@ -76,10 +71,10 @@ export class FetchData extends Component {
     })
       .then((response) => response.json(data))
       .then((data) => {
-        alert("Success:", data);
+        alert("Success", data);
       })
       .catch((error) => {
-        alert("Error:", error);
+        alert("Error", error);
       });
 
     /* fetch('https://localhost:5001/animal/add/',
@@ -143,6 +138,7 @@ export class FetchData extends Component {
       return response.blob();
     });*/
   }
+
   static renderAnimal(animal) {
     return (
       <table className="table table-striped" aria-labelledby="tabelLabel">
@@ -156,10 +152,10 @@ export class FetchData extends Component {
         </thead>
         <tbody>
           <tr key={animal.id}>
-            <td>{animal.id}</td>
-            <td>{animal.lastVaccineDate}</td>
-            <td>{animal.age}</td>
-            <td>{animal.nextVaccineDate}</td>
+            <td id="idDataRow">{animal.id}</td>
+            <td id="lastDataRow">{animal.lastVaccineDate}</td>
+            <td id="ageDataRow">{animal.age}</td>
+            <td id="nextDataRow">{animal.nextVaccineDate}</td>
           </tr>
         </tbody>
       </table>
@@ -190,16 +186,56 @@ export class FetchData extends Component {
       </table>
     );
   }
+  static updateOnClick() {
+    const idToUpdate = document.getElementById("getData").value;
+    const ageToUpdate = document.getElementById("ageUpdateText").value;
+    var nextDateToUpdate = document.getElementById("nextDateUpdateText").value;
+    var lastDateToUpdate = document.getElementById("lastDateUpdateText").value;
+    var nextDateObj = new Date(nextDateToUpdate);
+    nextDateObj.toJSON();
+    var lastDateObj = new Date(lastDateToUpdate);
+    lastDateObj.toJSON();
 
-  static renderUpdate(animal) {
+    var datam = {
+      id: parseInt(idToUpdate),
+      lastVaccineDate: lastDateObj,
+      nextVaccineDate: nextDateObj,
+      age: parseInt(ageToUpdate),
+    };
+    fetch("https://localhost:5001/animal/update", {
+      method: "PUT",
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datam),
+    })
+      .then((response) => response.json(datam))
+      .then((datam) => {
+        alert("Success", datam);
+      })
+      .catch((error) => {
+        alert("Error", error);
+      });
+  }
+  static renderUpdate() {
     return (
       <div className="updateInputsDiv">
         Age : <input type="text" id="ageUpdateText" className="updateInputs" />
         Last Vaccine Date :{" "}
-        <input id="lastDateUpdateText" type="text" className="updateInputs" />
+        <input id="lastDateUpdateText" type="date" className="updateInputs" />
         Next Vaccine Date :{" "}
-        <input id="nextDateUpdateText" type="text" className="updateInputs" />
-        <button className="updateButton">Update</button>
+        <input id="nextDateUpdateText" type="date" className="updateInputs" />
+        <button
+          className="updateButton"
+          onClick={this.updateOnClick.bind(this)}
+        >
+          Update
+        </button>
       </div>
     );
   }
@@ -226,6 +262,7 @@ export class FetchData extends Component {
     ) : (
       FetchData.renderUpdate(this.state.animal)
     );
+
     return (
       <div>
         <h1 id="tabelLabel">Pet List</h1>
@@ -260,11 +297,10 @@ export class FetchData extends Component {
 
   async GetAnimalData() {
     const response = await fetch("animal/" + this.state.id);
-    //alert('animal/'+this.state.id);
     const data = await response.json();
-    this.setState({ animal: data, loadingAn: false });
+    this.setState({ animal: data });
   }
-  async postData() {
+  /*async postData() {
     const response = await fetch("animal/add", {
       method: "POST",
       headers: {
@@ -275,5 +311,5 @@ export class FetchData extends Component {
     });
 
     return response.json();
-  }
+  }*/
 }
