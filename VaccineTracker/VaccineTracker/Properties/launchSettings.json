@@ -1,5 +1,6 @@
 ﻿{
   "iisSettings": {
+    "requireExactSource": false,
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {

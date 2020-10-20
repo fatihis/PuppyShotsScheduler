@@ -50,12 +50,12 @@ namespace VaccineTracker.Controllers
             return animalToAdd;
 
         }
-        [HttpPut]
+        [HttpPut("update")]
         public Animal Put(Animal animalToUpdate)
         {
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
-            context.updateAnimal(animalToUpdate);
-            return animalToUpdate;
+
+            return context.updateAnimal(animalToUpdate);
         }
         /*[HttpPost()]
         public Animal Set(int id,  DateTime last, DateTime next,int age)

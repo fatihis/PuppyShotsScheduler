@@ -96,7 +96,9 @@ namespace VaccineTracker
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                string updateAnimalCmdString = "update puppytable set agepuppytable=@agepuppy, latestvaccinetable=@lastvaccine, nextvaccinetable=@nextvaccine where idpuppytable='iduppytable=@animalid'";
+                string sqlFormattedDateLast = updatedAnimalData.LastVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string sqlFormattedDateNext = updatedAnimalData.NextVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string updateAnimalCmdString = "update puppytable set agepuppytable=@agepuppy, latestvaccinetable=@lastvaccine, nextvaccinetable=@nextvaccine where idpuppytable= '" + updatedAnimalData.ID + "'";
 
 
                 MySqlCommand cmd = new MySqlCommand(updateAnimalCmdString, conn);
@@ -105,8 +107,8 @@ namespace VaccineTracker
 
                     cmd.Parameters.AddWithValue("@animalid", updatedAnimalData.ID);
                     cmd.Parameters.AddWithValue("@agepuppy", updatedAnimalData.Age);
-                    cmd.Parameters.AddWithValue("@lastvaccine", updatedAnimalData.LastVaccineDate);
-                    cmd.Parameters.AddWithValue("@nextvaccine", updatedAnimalData.NextVaccineDate);
+                    cmd.Parameters.AddWithValue("@lastvaccine", sqlFormattedDateLast);
+                    cmd.Parameters.AddWithValue("@nextvaccine", sqlFormattedDateNext);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -149,11 +151,10 @@ namespace VaccineTracker
                 conn.Open();
                 DateTime nextTemp = DateTime.Now;
                 DateTime lastTemp = DateTime.Now.AddDays(90);
-
-                /*string sqlFormattedDateLast = animalToAdd.LastVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                string sqlFormattedDateNext = animalToAdd.NextVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");*/
-                string sqlFormattedDateNext = nextTemp.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                string sqlFormattedDateLast = lastTemp.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string sqlFormattedDateLast = animalToAdd.LastVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string sqlFormattedDateNext = animalToAdd.NextVaccineDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                /*string sqlFormattedDateNext = nextTemp.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string sqlFormattedDateLast = lastTemp.ToString("yyyy-MM-dd HH:mm:ss.fff");*/
                 Console.WriteLine("animalobject:" + animalToAdd.ToString());
 
                 string insertAnimalCmdString = "insert into puppytable (idpuppytable,agepuppytable,latestvaccinetable,nextvaccinetable) values ('" + animalToAdd.ID + "','" + animalToAdd.Age + "','" + sqlFormattedDateLast + "','" + sqlFormattedDateNext + "')";
