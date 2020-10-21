@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as ReactBootStrap from "react-bootstrap";
+import { Button } from "react-bootstrap";
 export class FetchData extends Component {
   static displayName = FetchData.name;
   static counter = 0;
@@ -7,62 +8,56 @@ export class FetchData extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      animals: [],
-      error: "",
-      animal: Object,
-      addObject: Object,
-      id: 0,
-      loading: true,
-      loadingAn: true,
-      urlAdd: "https://localhost:5001/animal",
+      animals: [], //to retrieve animal list (all animals) with httpget method
+      animal: Object, //to retrieve with httpget method
+      addObject: Object, //to send with httppost method
+      id: 0, //getting animal id
+      loading: true, //loading state to keep under control tables and fields of animal table
+      loadingAn: true, //loading state to keep under control tables and fields of animal object
+      urlAdd: "https://localhost:5001/animal", //add url state for using out of the scope
     };
   }
 
   componentDidMount() {
-    this.populateAnimalData();
+    this.populateAnimalData(); // get animal data
   }
   componentDidUpdate() {
-    this.populateAnimalData();
+    this.populateAnimalData(); //update date if state has changed ( add, delete or update animal)
   }
   searchOnclick() {
-    //aşağıdaki populate animals gibi method yazılmalısın ismi getAnimal(int id) olabilir fetch('animal') yerine fetch('animal/id'); yazmalısın getAnimala yollayacağın id searchün üstündeki textboxt ın verisi olmalı
-    //getAnimal(idSearch.text)
+    //(aysegule) aşağıdaki populate animals gibi method yazılmalısın ismi getAnimal(int id) olabilir fetch('animal') yerine fetch('animal/id'); yazmalısın getAnimala yollayacağın id searchün üstündeki textboxt ın verisi olmalı
+
     const inputVal = document.getElementById("getData").value;
-
-    this.setState({ id: inputVal });
-
-    this.GetAnimalData();
-    this.setState({ loadingAn: false });
-
-    this.setState({ counter: true });
+    this.setState({ id: inputVal }); //set textbox value to id state
+    this.GetAnimalData(); // calls fetching for single animal
+    this.setState({ loadingAn: false }); //let contents to fill up
   }
   addOnclick() {
     const idToAdd = document.getElementById("idToAddInput").value;
     const ageToAdd = document.getElementById("ageToAddInput").value;
-
     var nextDateToAdd = document.getElementById("nextVacToAddInput").value;
     var lastDateToAdd = document.getElementById("lastVacToAddInput").value;
-    var nextDateObj = new Date(nextDateToAdd);
+    var nextDateObj = new Date(nextDateToAdd); //because of using DateTime data type on serverside need to handle before post
     nextDateObj.toJSON();
-    var lastDateObj = new Date(lastDateToAdd);
+    var lastDateObj = new Date(lastDateToAdd); //because of using DateTime data type on serverside need to handle before post
     lastDateObj.toJSON();
 
     var data = {
-      id: parseInt(idToAdd),
+      //construct animal data to post
+      id: parseInt(idToAdd), //html button returns string so parsing it to integer
       lastVaccineDate: nextDateObj,
       nextVaccineDate: lastDateObj,
-      age: parseInt(ageToAdd),
+      age: parseInt(ageToAdd), //html button returns string so parsing it to integer
     };
-    this.setState({ addObject: data });
-    //this.postData();
-    console.log("data:" + data);
+    console.log("data:" + data); //tests
     console.log("datajson:" + JSON.stringify(data));
     fetch("https://localhost:5001/animal/add", {
+      //fetching data httppost
       method: "POST",
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
-      redirect: "follow", // manual, *follow, error
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      redirect: "follow",
       referrerPolicy: "no-referrer",
       headers: {
         "Content-Type": "application/json",
@@ -138,6 +133,55 @@ export class FetchData extends Component {
       return response.blob();
     });*/
   }
+  deleteOnClick() {
+    var deleteElementId = document.getElementById("getData").value;
+    fetch("https://localhost:5001/animal/" + deleteElementId, {
+      //fetching data http delete
+      method: "DELETE",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+    });
+  }
+  static updateOnClick() {
+    const idToUpdate = document.getElementById("getData").value;
+    const ageToUpdate = document.getElementById("ageUpdateText").value;
+    var nextDateToUpdate = document.getElementById("nextDateUpdateText").value;
+    var lastDateToUpdate = document.getElementById("lastDateUpdateText").value;
+    var nextDateObj = new Date(nextDateToUpdate); //because of using DateTime data type on serverside need to handle before put
+    nextDateObj.toJSON();
+    var lastDateObj = new Date(lastDateToUpdate); //because of using DateTime data type on serverside need to handle before put
+    lastDateObj.toJSON();
+
+    var datam = {
+      id: parseInt(idToUpdate), //html button returns string so parsing it to integer
+      lastVaccineDate: lastDateObj,
+      nextVaccineDate: nextDateObj,
+      age: parseInt(ageToUpdate), //html button returns string so parsing it to integer
+    };
+    fetch("https://localhost:5001/animal/update", {
+      //fetching data httpput
+      method: "PUT",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datam),
+    })
+      .then((response) => response.json(datam))
+      .then((datam) => {
+        alert("Success", datam);
+      })
+      .catch((error) => {
+        alert("Error", error);
+      });
+  }
 
   static renderAnimal(animal) {
     return (
@@ -186,42 +230,7 @@ export class FetchData extends Component {
       </table>
     );
   }
-  static updateOnClick() {
-    const idToUpdate = document.getElementById("getData").value;
-    const ageToUpdate = document.getElementById("ageUpdateText").value;
-    var nextDateToUpdate = document.getElementById("nextDateUpdateText").value;
-    var lastDateToUpdate = document.getElementById("lastDateUpdateText").value;
-    var nextDateObj = new Date(nextDateToUpdate);
-    nextDateObj.toJSON();
-    var lastDateObj = new Date(lastDateToUpdate);
-    lastDateObj.toJSON();
 
-    var datam = {
-      id: parseInt(idToUpdate),
-      lastVaccineDate: lastDateObj,
-      nextVaccineDate: nextDateObj,
-      age: parseInt(ageToUpdate),
-    };
-    fetch("https://localhost:5001/animal/update", {
-      method: "PUT",
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
-      redirect: "follow", // manual, *follow, error
-      referrerPolicy: "no-referrer",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(datam),
-    })
-      .then((response) => response.json(datam))
-      .then((datam) => {
-        alert("Success", datam);
-      })
-      .catch((error) => {
-        alert("Error", error);
-      });
-  }
   static renderUpdate() {
     return (
       <div className="updateInputsDiv">
@@ -230,32 +239,36 @@ export class FetchData extends Component {
         <input id="lastDateUpdateText" type="date" className="updateInputs" />
         Next Vaccine Date :{" "}
         <input id="nextDateUpdateText" type="date" className="updateInputs" />
-        <button
+        <Button
+          variant="primary"
           className="updateButton"
           onClick={this.updateOnClick.bind(this)}
         >
           Update
-        </button>
+        </Button>
       </div>
     );
   }
 
   render() {
-    let contents = this.state.loading ? (
+    //for not to enable fields before retrive data
+    let renderanimaltable = this.state.loading ? (
       <p>
         <em>Loading...</em>
       </p>
     ) : (
       FetchData.renderAnimalsTable(this.state.animals)
     );
-    let contentsx = this.state.loadingAn ? (
+    //for not to enable fields before retrive data
+    let renderanimal = this.state.loadingAn ? (
       <p>
         <em>Loading...</em>
       </p>
     ) : (
       FetchData.renderAnimal(this.state.animal)
     );
-    let contentsUpdate = this.state.loadingAn ? (
+    //for not to enable fields before retrive data
+    let renderupdate = this.state.loadingAn ? (
       <p>
         <em>Loading...</em>
       </p>
@@ -269,9 +282,14 @@ export class FetchData extends Component {
         <p>In progress</p>
         ID:
         <input type="text" id="getData" className="idSearch" />
-        <button onClick={this.searchOnclick.bind(this)}>Search</button>
-        {contentsx}
-        {contentsUpdate}
+        <Button variant="primary" onClick={this.searchOnclick.bind(this)}>
+          Search
+        </Button>
+        <Button variant="primary" onClick={this.deleteOnClick.bind(this)}>
+          Delete
+        </Button>
+        {renderanimal}
+        {renderupdate}
         <div className="data"></div>
         <div className="addInputsDiv">
           ID : <input type="text" id="idToAddInput" className="addInputs" />
@@ -280,23 +298,27 @@ export class FetchData extends Component {
           <input type="date" id="nextVacToAddInput" className="addInputs" />
           Next Vaccine Date :{" "}
           <input type="date" id="lastVacToAddInput" className="addInputs" />
-          <button className="addButton" onClick={this.addOnclick.bind(this)}>
+          <Button
+            variant="primary"
+            className="addButton"
+            onClick={this.addOnclick.bind(this)}
+          >
             Add
-          </button>
+          </Button>
         </div>
-        {contents}
+        {renderanimaltable}
       </div>
     );
   }
 
   async populateAnimalData() {
-    const response = await fetch("animal");
+    const response = await fetch("animal"); //fetching localhost/animal httpget
     const data = await response.json();
     this.setState({ animals: data, loading: false });
   }
 
   async GetAnimalData() {
-    const response = await fetch("animal/" + this.state.id);
+    const response = await fetch("animal/" + this.state.id); //fetching localhost/animal/{id} httpget
     const data = await response.json();
     this.setState({ animal: data });
   }

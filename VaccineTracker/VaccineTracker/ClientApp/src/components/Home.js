@@ -1,16 +1,9 @@
-import React, { Component } from 'react';
-import MenuComp from "./MenuComp"
+import React, { Component } from "react";
 
 export class Home extends Component {
   static displayName = Home.name;
 
-  render () {
-    return (
-        <div>
-           
-            <MenuComp />
-
-      </div>
-    );
+  render() {
+    return <div></div>;
   }
 }

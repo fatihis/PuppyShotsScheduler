@@ -14,12 +14,6 @@ namespace VaccineTracker.Controllers
     [Route("[controller]")]
     public class AnimalController : ControllerBase
     {
-
-
-
-
-
-
         private readonly ILogger<AnimalController> _logger;
 
         public AnimalController(ILogger<AnimalController> logger)
@@ -28,19 +22,26 @@ namespace VaccineTracker.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Animal> Get()
+        public IEnumerable<Animal> Get() //https://localhost:5001/animal (mapping route)
         {
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
             return context.GetAllPuppys();
         }
 
         [HttpGet("{id}")]
-        public Animal Get(int id)
+        public Animal Get(int id) //https://localhost:5001/animal/{id} (mapping route)
         {
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
             return context.GetPuppy(id);
         }
-        [HttpPost("add")]
+        [HttpDelete("{id}")] //https://localhost:5001/animal/{id} (mapping route)
+        public int Delete(int id)
+        {
+            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
+
+            return context.deleteAnimal(id);
+        }
+        [HttpPost("add")] //https://localhost:5001/animal/add (mapping route)
         public Animal add([FromBody] Animal animalToAdd)
         {
 
@@ -50,37 +51,17 @@ namespace VaccineTracker.Controllers
             return animalToAdd;
 
         }
-        [HttpPut("update")]
+        [HttpPut("update")] //https://localhost:5001/animal/update (mapping route)
         public Animal Put(Animal animalToUpdate)
         {
             DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
 
             return context.updateAnimal(animalToUpdate);
         }
-        /*[HttpPost()]
-        public Animal Set(int id,  DateTime last, DateTime next,int age)
-        {
-            Console.WriteLine("set1");
-            Animal animalToAdd = new Animal
-            {
-                Age = age,
-                ID = id,
-                LastVaccineDate = last,
-                NextVaccineDate = next
-            };
-            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
-            context.AddPuppy(animalToAdd);
-            return context.GetPuppy(id);
 
-        }
-        [HttpPost()]
-        public Animal Set(int id, Animal data)
-        {
-            Console.WriteLine("set2");
-            DataTool context = HttpContext.RequestServices.GetService(typeof(DataTool)) as DataTool;
-            context.updateAnimal(id, data);
-            return context.GetPuppy(id);
-        }*/
+
+
+
 
     }
 }
