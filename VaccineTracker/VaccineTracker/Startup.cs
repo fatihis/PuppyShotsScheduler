@@ -25,11 +25,11 @@ namespace VaccineTracker
 
             services.AddControllersWithViews();
             services.Add(new ServiceDescriptor(typeof(DataTool), new DataTool(Configuration.GetConnectionString("DefaultConnection"))));
-
+            services.AddMvc(option => option.EnableEndpointRouting = false);
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "C:/Users/fatih/Desktop/vaccine-puppy-react/VaccineTrackerClient/App/build";
+                configuration.RootPath = "C:/Users/fatih/Desktop/Puppy-shots-scheduler/PuppyShotsScheduler/VaccineTracker/client-side/ClientApp";
             });
         }
 
@@ -50,7 +50,7 @@ namespace VaccineTracker
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseMvc();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -62,7 +62,7 @@ namespace VaccineTracker
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "C:/Users/fatih/Desktop/Puppy-shots-scheduler/PuppyShotsScheduler/VaccineTracker/client-side/ClientApp";
 
                 if (env.IsDevelopment())
                 {
